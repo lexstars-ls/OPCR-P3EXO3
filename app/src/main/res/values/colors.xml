@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
+    <color name="grey">#666666</color>
+    <color name="greyRating">#DADADA</color>
+    <color name="greyText">#9A9A9A</color>
     <color name="white">#FFFFFFFF</color>
     <color name="red">#CF2F2F</color>
+    <color name="yellowRating">#FFB800</color>
 </resources>
