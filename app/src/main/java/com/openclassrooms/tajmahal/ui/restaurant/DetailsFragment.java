@@ -60,10 +60,35 @@ public class DetailsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setupUI(); // Sets up user interface components.
-        setupViewModel(); // Prepares the ViewModel for the fragment.
-        detailsViewModel.getTajMahalRestaurant().observe(requireActivity(), this::updateUIWithRestaurant); // Observes changes in the restaurant data and updates the UI accordingly.
+
+        setupUI();
+        setupViewModel();
+
+        // Observe restaurant
+        detailsViewModel.getTajMahalRestaurant().observe(
+                getViewLifecycleOwner(),
+                this::updateUIWithRestaurant
+        );
+
+        // Observe total reviews
+        detailsViewModel.getTotalReviews().observe(
+                getViewLifecycleOwner(),
+                total -> binding.restaurantTotalRating.setText(String.valueOf(total))
+        );
+
+        // Observe average rating
+        detailsViewModel.getAverageRating().observe(
+                getViewLifecycleOwner(),
+                avg -> {
+                    // Mise à jour du RatingBar
+                    binding.restaurantRatingBar.setRating(avg.floatValue());
+
+                    // Mise à jour d’un TextView
+                    binding.restaurantRate.setText(String.format("%.1f", avg));
+                }
+        );
     }
+
 
     /**
      * Creates and returns the view hierarchy associated with the fragment.

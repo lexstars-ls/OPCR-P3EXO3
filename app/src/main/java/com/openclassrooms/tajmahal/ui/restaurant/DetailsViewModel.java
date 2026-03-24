@@ -3,54 +3,52 @@ package com.openclassrooms.tajmahal.ui.restaurant;
 import android.content.Context;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.openclassrooms.tajmahal.R;
 import com.openclassrooms.tajmahal.data.repository.RestaurantRepository;
 import com.openclassrooms.tajmahal.domain.model.Restaurant;
 
-import javax.inject.Inject;
-
 import java.util.Calendar;
+
+import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
-/**
- * MainViewModel is responsible for preparing and managing the data for the {@link DetailsFragment}.
- * It communicates with the {@link RestaurantRepository} to fetch restaurant details and provides
- * utility methods related to the restaurant UI.
- *
- * This ViewModel is integrated with Hilt for dependency injection.
- */
 @HiltViewModel
 public class DetailsViewModel extends ViewModel {
 
     private final RestaurantRepository restaurantRepository;
 
-    /**
-     * Constructor that Hilt will use to create an instance of MainViewModel.
-     *
-     * @param restaurantRepository The repository which will provide restaurant data.
-     */
+    private final MutableLiveData<Double> averageRating = new MutableLiveData<>();
+    private final MutableLiveData<Integer> totalReviews = new MutableLiveData<>();
+
+    public LiveData<Double> getAverageRating() {
+        return averageRating;
+    }
+
+    public LiveData<Integer> getTotalReviews() {
+        return totalReviews;
+    }
+
     @Inject
     public DetailsViewModel(RestaurantRepository restaurantRepository) {
         this.restaurantRepository = restaurantRepository;
+
+        // Observe reviews and update LiveData
+        restaurantRepository.getReviews().observeForever(reviews -> {
+            if (reviews != null) {
+                totalReviews.setValue(restaurantRepository.getTotalReviews());
+                averageRating.setValue(restaurantRepository.getReviewsAverage());
+            }
+        });
     }
 
-    /**
-     * Fetches the details of the Taj Mahal restaurant.
-     *
-     * @return LiveData object containing the details of the Taj Mahal restaurant.
-     */
     public LiveData<Restaurant> getTajMahalRestaurant() {
         return restaurantRepository.getRestaurant();
     }
 
-    /**
-     * Retrieves the current day of the week in French.
-     *
-     * @return A string representing the current day of the week in French.
-     */
     public String getCurrentDay(Context context) {
         Calendar calendar = Calendar.getInstance();
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
