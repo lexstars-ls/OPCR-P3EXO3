@@ -38,6 +38,10 @@ android {
 }
 
 dependencies {
+    // Glide
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.16.0")
+
     implementation("androidx.work:work-runtime:2.8.1")
     val hiltVersion = "2.44"
 

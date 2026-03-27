@@ -8,6 +8,7 @@ import com.openclassrooms.tajmahal.data.service.RestaurantApi;
 import com.openclassrooms.tajmahal.domain.model.Restaurant;
 import com.openclassrooms.tajmahal.domain.model.Review;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -63,6 +64,37 @@ public class RestaurantRepository {
         }
 
         return total / reviews.size();
+    }
+    // Fonction pour calculer la répartition des notes
+    public int[] getReviewsRepartition() {
+        int[] repartition = new int[5]; // index 0 = 1, index 4 = 5
+
+        List<Review> reviews = reviewsLiveData.getValue();
+        if (reviews == null) return repartition;
+
+        for (Review review : reviews) {
+            int rate = review.getRate(); // 1 à 5
+            if (rate >= 1 && rate <= 5) {
+                repartition[rate - 1]++; // on incrémente la bonne case
+            }
+        }
+
+        return repartition;
+    }
+
+    // fonction pour gérer la création d'une nouvelle review
+    public void addReview(Review newReview) {
+        List<Review> currentReviews = reviewsLiveData.getValue();
+        if (currentReviews == null) currentReviews = new ArrayList<>();
+
+        // On crée une nouvelle liste modifiable
+        List<Review> updated = new ArrayList<>(currentReviews);
+
+        // On ajoute la review en haut
+        updated.add(0, newReview);
+
+        // On met à jour le LiveData
+        reviewsLiveData.setValue(updated);
     }
 
 

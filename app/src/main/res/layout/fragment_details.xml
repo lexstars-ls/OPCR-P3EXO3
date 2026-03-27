@@ -155,7 +155,7 @@
 
             <!--pour la colone de droite 5 progressBar-->
             <ProgressBar
-                android:id="@+id/FirstProgressBar"
+                android:id="@+id/progress5Stars"
                 style="@android:style/Widget.ProgressBar.Horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="3dp"
@@ -168,7 +168,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/restaurantRate" />
             <ProgressBar
-                android:id="@+id/secondProgressBar"
+                android:id="@+id/progress4Stars"
                 style="@android:style/Widget.ProgressBar.Horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="3dp"
@@ -179,9 +179,9 @@
                 android:progress="75"
                 android:progressTint="@color/yellowRating"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/FirstProgressBar" />
+                app:layout_constraintTop_toTopOf="@id/progress5Stars" />
             <ProgressBar
-                android:id="@+id/thirdProgressBar"
+                android:id="@+id/progress3Stars"
                 style="@android:style/Widget.ProgressBar.Horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="3dp"
@@ -192,9 +192,9 @@
                 android:progress="50"
                 android:progressTint="@color/yellowRating"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/secondProgressBar" />
+                app:layout_constraintTop_toTopOf="@id/progress4Stars" />
             <ProgressBar
-                android:id="@+id/fourthProgressBar"
+                android:id="@+id/progress2Stars"
                 style="@android:style/Widget.ProgressBar.Horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="3dp"
@@ -205,9 +205,9 @@
                 android:progress="25"
                 android:progressTint="@color/yellowRating"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/thirdProgressBar" />
+                app:layout_constraintTop_toTopOf="@id/progress3Stars" />
             <ProgressBar
-                android:id="@+id/fifthProgressBar"
+                android:id="@+id/progress1Stars"
                 style="@android:style/Widget.ProgressBar.Horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="3dp"
@@ -218,7 +218,7 @@
                 android:progress="40"
                 android:progressTint="@color/yellowRating"
                 app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/fourthProgressBar" />
+            app:layout_constraintTop_toTopOf="@id/progress2Stars" />
             <TextView
                 android:id="@+id/tvLeaveReview"
                 android:layout_width="wrap_content"
@@ -233,7 +233,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/fifthProgressBar" />
+                app:layout_constraintTop_toTopOf="@id/progress1Stars" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 <!--fin des modifications Pour l'affichage des éléments du block avis-->

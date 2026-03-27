@@ -23,11 +23,13 @@ public class DetailsViewModel extends ViewModel {
 
     private final MutableLiveData<Double> averageRating = new MutableLiveData<>();
     private final MutableLiveData<Integer> totalReviews = new MutableLiveData<>();
-
+    private final MutableLiveData<int[]> reviewsRepartition = new MutableLiveData<>();
     public LiveData<Double> getAverageRating() {
         return averageRating;
     }
-
+    public LiveData<int[]> getReviewsRepartition() {
+        return reviewsRepartition;
+    }
     public LiveData<Integer> getTotalReviews() {
         return totalReviews;
     }
@@ -39,11 +41,19 @@ public class DetailsViewModel extends ViewModel {
         // Observe reviews and update LiveData
         restaurantRepository.getReviews().observeForever(reviews -> {
             if (reviews != null) {
+
+                // Total des reviews
                 totalReviews.setValue(restaurantRepository.getTotalReviews());
+
+                // Moyenne des notes
                 averageRating.setValue(restaurantRepository.getReviewsAverage());
+
+                // Répartition des notes (1★ → 5★)
+                reviewsRepartition.setValue(restaurantRepository.getReviewsRepartition());
             }
         });
     }
+
 
     public LiveData<Restaurant> getTajMahalRestaurant() {
         return restaurantRepository.getRestaurant();

@@ -73,13 +73,3 @@ public class RestaurantFakeApi implements RestaurantApi {
 
 }
 
-// add review @Override
-//    public int addReview(@NotNull Review oReviewP) {
-//...
-//}
-//
-// @Override
-//    public Review getUserReviewIfExist(String sUserName) {
-//...
-//
-//}
