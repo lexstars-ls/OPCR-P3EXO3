@@ -52,8 +52,3 @@ public interface RestaurantApi {
     List<Review> getReviews();
 }
 
-//FakeAPI :
-//
-//int addReview(@NotNull Review oReviewP);
-//
-//Review getUserReviewIfExist(String sUserName)

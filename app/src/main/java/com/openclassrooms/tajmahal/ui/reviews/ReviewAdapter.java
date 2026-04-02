@@ -1,6 +1,7 @@
 package com.openclassrooms.tajmahal.ui.reviews;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,18 +12,6 @@ import com.openclassrooms.tajmahal.domain.model.Review;
 
 import java.util.ArrayList;
 import java.util.List;
-/**
- * Adapter du RecyclerView affichant la liste des avis (reviews).
- *
- * Rôle :
- * - Convertir chaque objet Review en un item visuel affiché dans la liste
- * - Gérer l'inflation du layout de chaque item
- * - Lier les données (nom, note, commentaire, photo) aux vues correspondantes
- * - Optimiser les performances grâce à DiffUtil pour ne mettre à jour que les éléments modifiés
- *
- * Cet adapter fait le lien entre les données fournies par le ViewModel et l'affichage
- * dans le RecyclerView.
- */
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder> {
 
@@ -64,6 +53,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
             this.binding = binding;
         }
 
+        // function pour la gestion des élements a stocker avant upload
         public void bind(Review review) {
 
             // Nom
@@ -72,10 +62,17 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
             // Note
             binding.reviewBar.setRating(review.getRate());
 
-            // Texte
-            binding.reviewText.setText(review.getComment());
+            // Commentaire
+            String comment = review.getComment();
 
-            // Image (si tu veux utiliser Glide)
+            if (comment == null || comment.trim().isEmpty()) {
+                binding.reviewText.setVisibility(View.GONE);
+            } else {
+                binding.reviewText.setVisibility(View.VISIBLE);
+                binding.reviewText.setText(comment);
+            }
+
+            // Image
             Glide.with(binding.getRoot().getContext())
                     .load(review.getPicture())
                     .placeholder(com.openclassrooms.tajmahal.R.drawable.ic_launcher)

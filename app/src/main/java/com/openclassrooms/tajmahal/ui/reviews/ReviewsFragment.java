@@ -17,18 +17,6 @@ import com.openclassrooms.tajmahal.databinding.FragmentReviewsBinding;
 import com.openclassrooms.tajmahal.domain.model.Review;
 
 import dagger.hilt.android.AndroidEntryPoint;
-/**
- * Fragment chargé d'afficher la liste des avis (reviews) et de gérer les interactions
- * liées à l'ajout ou la mise à jour d'un avis utilisateur.
- *
- * Rôle :
- * - Observe les LiveData du ReviewsViewModel (liste des avis, statistiques, etc.)
- * - Met à jour l'interface utilisateur en fonction des données reçues
- * - Initialise et configure le RecyclerView et son adapter
- * - Gère les actions utilisateur (validation d'un avis, saisie du texte, notation)
- *
- * Ce Fragment représente la couche UI de la fonctionnalité "Avis" dans l'architecture MVVM.
- */
 
 @AndroidEntryPoint
 public class ReviewsFragment extends Fragment {
@@ -51,34 +39,30 @@ public class ReviewsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // ViewModel
         viewModel = new ViewModelProvider(this).get(ReviewsViewModel.class);
 
-        // Adapter
         adapter = new ReviewAdapter();
         binding.reviewsList.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.reviewsList.setAdapter(adapter);
 
-        // Observer les reviews
         viewModel.getReviews().observe(getViewLifecycleOwner(), reviews -> {
             adapter.submitList(reviews);
         });
 
-        //activer ta Toolbar comme ActionBar
-        // Sans ça, la flèche n'est PAS cliquable
         ((AppCompatActivity) requireActivity()).setSupportActionBar(binding.userToolBar);
 
-       // clique retour
         binding.userToolBar.setNavigationOnClickListener(v ->
                 requireActivity().getSupportFragmentManager().popBackStack()
         );
 
-        // Bouton valider
         binding.userValidate.setOnClickListener(v -> {
             String comment = binding.userReviewText.getText().toString().trim();
             int rate = (int) binding.userRatingBar.getRating();
 
-            if (comment.isEmpty() || rate == 0) return;
+            // Nettoyage du commentaire : jamais de hint dans la liste
+            if (comment.isEmpty()) {
+                comment = "";
+            }
 
             Review newReview = new Review(
                     "Utilisateur",
@@ -87,12 +71,14 @@ public class ReviewsFragment extends Fragment {
                     rate
             );
 
-            viewModel.addReview(newReview);
+            boolean success = viewModel.addReview(newReview);
 
-            // Reset UI
-            binding.userReviewText.setText("");
-            binding.userRatingBar.setRating(0);
+            if (success) {
+                binding.userReviewText.setText("");
+                binding.userRatingBar.setRating(0);
+            } else {
+                Toast.makeText(requireContext(), "Veuillez choisir une note", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 }
-

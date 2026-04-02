@@ -14,17 +14,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-
-/**
- * This is the repository class for managing restaurant data. Repositories are responsible
- * for coordinating data operations from data sources such as network APIs, databases, etc.
- * <p>
- * Typically in an Android app built with architecture components, the repository will handle
- * the logic for deciding whether to fetch data from a network source or use data from a local cache.
- *
- * @see Restaurant
- * @see RestaurantApi
- */
 @Singleton
 public class RestaurantRepository {
 
@@ -34,7 +23,13 @@ public class RestaurantRepository {
     @Inject
     public RestaurantRepository(@NonNull RestaurantApi restaurantApi) {
         this.restaurantApi = restaurantApi;
-        reviewsLiveData.setValue(restaurantApi.getReviews());
+
+        // On copie la liste pour la rendre modifiable
+        List<Review> initial = restaurantApi.getReviews();
+        if (initial == null) initial = new ArrayList<>();
+        else initial = new ArrayList<>(initial);
+
+        reviewsLiveData.setValue(initial);
     }
 
     public LiveData<Restaurant> getRestaurant() {
@@ -45,87 +40,51 @@ public class RestaurantRepository {
         return reviewsLiveData;
     }
 
-    //fonction du calcul du nombre total de reviews
     public int getTotalReviews() {
         List<Review> reviews = reviewsLiveData.getValue();
         return (reviews != null) ? reviews.size() : 0;
     }
 
-    //fonction du calcul de la moyenne des notes
     public double getReviewsAverage() {
         List<Review> reviews = reviewsLiveData.getValue();
-        if (reviews == null || reviews.isEmpty()) {
-            return 0;
-        }
+        if (reviews == null || reviews.isEmpty()) return 0;
 
         double total = 0;
         for (Review review : reviews) {
             total += review.getRate();
         }
-
         return total / reviews.size();
     }
-    // Fonction pour calculer la répartition des notes
+
     public int[] getReviewsRepartition() {
-        int[] repartition = new int[5]; // index 0 = 1, index 4 = 5
+        int[] repartition = new int[5];
 
         List<Review> reviews = reviewsLiveData.getValue();
         if (reviews == null) return repartition;
 
         for (Review review : reviews) {
-            int rate = review.getRate(); // 1 à 5
+            int rate = review.getRate();
             if (rate >= 1 && rate <= 5) {
-                repartition[rate - 1]++; // on incrémente la bonne case
+                repartition[rate - 1]++;
             }
         }
-
         return repartition;
     }
 
-    // fonction pour gérer la création d'une nouvelle review
-    public void addReview(Review newReview) {
-        List<Review> currentReviews = reviewsLiveData.getValue();
-        if (currentReviews == null) currentReviews = new ArrayList<>();
+    // LOGIQUE MÉTIER : un rate est obligatoire
+    public boolean addReview(Review newReview) {
 
-        // On crée une nouvelle liste modifiable
-        List<Review> updated = new ArrayList<>(currentReviews);
+        if (newReview.getRate() == 0) {
+            return false; // refusé
+        }
 
-        // On ajoute la review en haut
-        updated.add(0, newReview);
+        List<Review> current = reviewsLiveData.getValue();
+        if (current == null) current = new ArrayList<>();
+        else current = new ArrayList<>(current);
 
-        // On met à jour le LiveData
-        reviewsLiveData.setValue(updated);
+        current.add(0, newReview);
+        reviewsLiveData.setValue(current);
+
+        return true; // accepté
     }
-
-
 }
-
-
-// Création de la function de récupération des avis.
- /*
- // ResaurantRepository.java :
-
- public MutableLiveData<List<Review>> getReviews() {
-   ...
-}
-// création de la function de calcul de la note moyenne des reviews
- public double getReviewsAverage() {
-    ...
-}
-// création de la function de calcul de nombre total de review
-public int getTotalReviews() {
-    ...
-}
-
- public int[] getReviewsRepartition() {
-   ..
-}
-
-public int addReview(@NotNull Review oReviewP) {
-   ...
-}
-
- public Review getUserReviewIfExist(String sUserName) {
-        return restaurantApi.getUserReviewIfExist(sUserName);
-    }
-  */
