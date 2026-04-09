@@ -23,7 +23,29 @@ import com.openclassrooms.tajmahal.domain.model.Restaurant;
 import com.openclassrooms.tajmahal.ui.reviews.ReviewsFragment;
 
 import dagger.hilt.android.AndroidEntryPoint;
-
+/**
+ * Fragment affichant les informations détaillées du restaurant ainsi que les statistiques
+ * liées aux avis (moyenne, total, répartition des notes).
+ *
+ * Ce fragment :
+ *
+ *  - Utilise ViewBinding pour gérer la vue de manière sûre et sans findViewById.
+ *  - Utilise Hilt (@AndroidEntryPoint) pour permettre l'injection de dépendances
+ *    dans le ViewModel associé.
+ *  - Observe plusieurs LiveData exposés par le DetailsViewModel afin de mettre à jour
+ *    l'interface utilisateur de manière réactive (données du restaurant, moyenne des notes,
+ *    total des avis, répartition des étoiles).
+ *  - Configure l'affichage plein écran en rendant la barre de statut transparente.
+ *  - Gère les interactions utilisateur : ouverture de Google Maps, du navigateur,
+ *    du composeur téléphonique, et navigation vers le ReviewsFragment pour laisser un avis.
+ *
+ * Le fragment se contente d'afficher les données et de gérer les interactions UI.
+ * Toute la logique métier (calculs, récupération des données, formatage) est déléguée
+ * au ViewModel, conformément à l'architecture MVVM.
+ *
+ * DetailsFragment sert donc de couche de présentation, réactive et légère,
+ * connectée au ViewModel pour garantir une UI toujours synchronisée avec les données.
+ */
 @AndroidEntryPoint
 public class DetailsFragment extends Fragment {
 

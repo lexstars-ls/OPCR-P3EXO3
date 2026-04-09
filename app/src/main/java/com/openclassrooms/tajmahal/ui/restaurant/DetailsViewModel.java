@@ -15,6 +15,30 @@ import java.util.Calendar;
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
+/**
+ * ViewModel responsable de fournir à l'interface utilisateur toutes les informations
+ * nécessaires à l'affichage des détails du restaurant ainsi que des statistiques
+ * liées aux avis (moyenne, total, répartition des notes).
+ *
+ * Ce ViewModel :
+ *
+ *  - Utilise Hilt (@HiltViewModel) pour recevoir automatiquement le RestaurantRepository.
+ *  - Observe en continu la liste des reviews exposée par le repository afin de mettre
+ *    à jour plusieurs LiveData dérivés :
+ *        → totalReviews : nombre total d'avis
+ *        → averageRating : moyenne des notes
+ *        → reviewsRepartition : répartition des notes de 1★ à 5★
+ *  - Fournit également les informations du restaurant via getTajMahalRestaurant().
+ *  - Expose une méthode utilitaire getCurrentDay() permettant d'afficher le jour
+ *    actuel dans la langue de l'utilisateur.
+ *
+ * Toute la logique métier (calculs, validation, récupération des données) est déléguée
+ * au RestaurantRepository. Le ViewModel se contente de transformer ces données en
+ * informations prêtes à être affichées par le fragment, conformément à l'architecture MVVM.
+ *
+ * Grâce à l'utilisation de LiveData, l'interface utilisateur reste automatiquement
+ * synchronisée avec les données, sans gestion manuelle du cycle de vie.
+ */
 
 @HiltViewModel
 public class DetailsViewModel extends ViewModel {

@@ -17,6 +17,37 @@ import com.openclassrooms.tajmahal.databinding.FragmentReviewsBinding;
 import com.openclassrooms.tajmahal.domain.model.Review;
 
 import dagger.hilt.android.AndroidEntryPoint;
+/**
+ * Fragment permettant d'afficher la liste des avis du restaurant et d'ajouter
+ * un nouvel avis via un formulaire simple (note + commentaire).
+ *
+ * Ce fragment :
+ *
+ *  - Utilise ViewBinding pour gérer la vue de manière sûre et sans findViewById.
+ *  - Utilise Hilt (@AndroidEntryPoint) pour permettre l'injection du ReviewsViewModel.
+ *  - Configure un RecyclerView avec un ReviewAdapter pour afficher dynamiquement
+ *    la liste des avis existants.
+ *  - Observe le LiveData des reviews exposé par le ViewModel afin de mettre à jour
+ *    automatiquement la liste lorsqu'un nouvel avis est ajouté.
+ *  - Gère la barre d’outils (Toolbar) avec un bouton de retour vers l’écran précédent.
+ *  - Permet à l’utilisateur de saisir un commentaire et une note, puis d’ajouter un avis.
+ *
+ * La validation et la logique métier (par exemple : refuser une review sans note)
+ * ne sont **pas gérées dans le fragment**, mais entièrement déléguées au Repository
+ * via le ViewModel, conformément à l’architecture MVVM :
+ *
+ *      UI (Fragment) → ViewModel → Repository (logique métier)
+ *
+ * Le fragment se concentre donc uniquement sur :
+ *  - la gestion de l’interface utilisateur,
+ *  - la récupération des entrées utilisateur,
+ *  - les interactions (clics, navigation),
+ *  - l’observation des données.
+ *
+ * Toute la logique métier (validation du rate, ajout ou rejet, mise à jour des données)
+ * est centralisée dans le Repository, garantissant une architecture propre,
+ * testable et maintenable.
+ */
 
 @AndroidEntryPoint
 public class ReviewsFragment extends Fragment {
